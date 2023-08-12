@@ -4,3 +4,4 @@ include $(SELF_DIR)lint/symfony.mk
 
 boing:
 	composer require friendsofphp/php-cs-fixer --dev
+	composer require phpstan/phpstan --dev
