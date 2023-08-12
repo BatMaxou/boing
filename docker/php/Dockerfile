@@ -11,6 +11,8 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN apk update && apk upgrade
 
+RUN install-php-extensions pdo_mysql
+
 # Configurable php configuration
 ENV MEMORY_LIMIT "256M"
 
