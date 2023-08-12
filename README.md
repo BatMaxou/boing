@@ -17,4 +17,6 @@ git submodule add git@github.com:BatMaxou/boing.git
 
 ### Docker
 
-Todo
+You can use docker images:
+
+Copy symfony.docker-compose.yaml to setup your symfony environment
