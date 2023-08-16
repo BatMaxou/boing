@@ -13,6 +13,11 @@ RUN apk update && apk upgrade
 
 RUN install-php-extensions pdo_mysql
 
+# ADDITIONAL MODULES
+
+ARG ENABLE_REDIS=0
+RUN if [[ "${ENABLE_REDIS}" -eq 1 ]] ; then install-php-extensions redis ; fi
+
 # Configurable php configuration
 ENV MEMORY_LIMIT "256M"
 
