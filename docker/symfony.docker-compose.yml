@@ -18,7 +18,7 @@ services:
     depends_on:
       - php
     build:
-      context: ./.boing/docker/nginx
+      context: ./.boing/docker/nginx/symfony
     volumes:
       - ./public:/srv/public
 

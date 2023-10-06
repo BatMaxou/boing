@@ -15,9 +15,11 @@ RUN install-php-extensions pdo_mysql
 
 # ADDITIONAL MODULES
 
+ARG GD_REQUIRE=0
 ARG ENABLE_REDIS=0
 ARG ENABLE_AMQP=0
 
+RUN if [[ "${GD_REQUIRE}" -eq 1 ]] ; then install-php-extensions gd; fi
 RUN if [[ "${ENABLE_AMQP}" -eq 1 ]] ; then install-php-extensions amqp ; fi
 RUN if [[ "${ENABLE_REDIS}" -eq 1 ]] ; then install-php-extensions redis ; fi
 
