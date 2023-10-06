@@ -1,6 +1,4 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-CONTAINER_NAME ?= php
-DB_CONTAINER_NAME ?= db
 
 include $(SELF_DIR)binaries/php.mk
 
@@ -8,6 +6,8 @@ current-date = $(shell date +"_%Y-%m-%d_%H-%M-%S")
 port ?= 8616
 
 ifeq ($(DOCKER_ENABLED), 1)
+	CONTAINER_NAME ?= php
+	DB_CONTAINER_NAME ?= db
 	CONTAINER := $(docker-compose) exec $(CONTAINER_NAME)
 	DB_CONTAINER := $(docker-compose) exec -T $(DB_CONTAINER_NAME)
 	DRUSH := $(CONTAINER) vendor/bin/drush
@@ -20,7 +20,7 @@ cache-clear:
 	@echo "--> Cache clear"
 
 init-backup:
-	@if [ "$(DOCKER_ENABLED)" ]; then \
+	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
 		$(CONTAINER) mkdir backups -p; \
     else \
         mkdir backups -p; \
@@ -28,7 +28,7 @@ init-backup:
 	@echo "--> backups directory enabled"
 
 refresh-backups:
-	@if [ "$(DOCKER_ENABLED)" ]; then \
+	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
 		$(CONTAINER) rm -rf backups/*; \
     else \
     	rm -rf backups/*; \
@@ -36,8 +36,8 @@ refresh-backups:
 	@echo "--> Backup directory cleaned"
 
 create-database:
-	@if [ "$(DOCKER_ENABLED)" ]; then \
-    	echo 'You should create the database by your own, this method is not safe'; \
+	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
+    	echo '--> You should create the database by your own, this method is not safe'; \
     else \
 		$(DRUSH) sql:create -y; \
 		echo "--> Database created"; \
@@ -48,7 +48,7 @@ start:
 
 dump:
 	@$(MAKE) init-backup
-	@if [ "$(DOCKER_ENABLED)" ]; then \
+	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
 		$(DB_CONTAINER) mysqldump -uroot -p$(DB_PASSWORD) $(DB_NAME) > backups/dump$(current-date).sql; \
     else \
 		$(DRUSH) sql:dump --result-file=../backups/dump$(current-date).sql; \
@@ -56,7 +56,7 @@ dump:
 	@echo "--> Database dumped"
 
 restore:
-	@if [ "$(DOCKER_ENABLED)" ]; then \
+	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
 		$(DB_CONTAINER) mysql -uroot -p$(DB_PASSWORD) $(DB_NAME) < $(file); \
     else \
 		$(DRUSH) sql:cli < $(file); \
