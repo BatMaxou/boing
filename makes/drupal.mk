@@ -34,6 +34,7 @@ refresh-backups:
     	rm -rf backups/*; \
     fi
 	@echo "--> Backup directory cleaned"
+	@$(MAKE) dump
 
 create-database:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
