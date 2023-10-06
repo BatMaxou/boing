@@ -1,6 +1,7 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
 include $(SELF_DIR)binaries/php.mk
+include $(SELF_DIR)style/color.mk
 
 current-date = $(shell date +"_%Y-%m-%d_%H-%M-%S")
 port ?= 8616
@@ -17,7 +18,15 @@ endif
 
 cache-clear:
 	@$(DRUSH) cache:rebuild
-	@echo "--> Cache clear"
+	@echo "\n$(GREEN)--> Cache clear <--$(RESET)\n"
+
+is-file-empty:
+	@if [ "$(file)" ]; then \
+		echo ''; \
+	else \
+		echo "\n$(RED)--> Missing file to restore <--$(RESET)\n"; \
+		exit 1; \
+	fi
 
 init-backup:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
@@ -25,7 +34,7 @@ init-backup:
     else \
         mkdir backups -p; \
     fi
-	@echo "--> backups directory enabled"
+	@echo "\n$(BLUE)--> $(PURPLE)backups $(BLUE)directory enabled <--$(RESET)\n"
 
 refresh-backups:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
@@ -33,15 +42,15 @@ refresh-backups:
     else \
     	rm -rf backups/*; \
     fi
-	@echo "--> Backup directory cleaned"
+	@echo "\n$(GREEN)--> Backup directory cleaned <--$(RESET)\n"
 	@$(MAKE) dump
 
 create-database:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
-    	echo '--> You should create the database by your own, this method is not safe'; \
+    	echo '\n$(YELLOW)--> You should create the database by your own, this method is not safe <--$(RESET)\n'; \
     else \
 		$(DRUSH) sql:create -y; \
-		echo "--> Database created"; \
+		echo "\n$(GREEN)--> Database created <--$(RESET)\n"; \
     fi
 
 start:
@@ -54,15 +63,18 @@ dump:
     else \
 		$(DRUSH) sql:dump --result-file=../backups/dump$(current-date).sql; \
     fi
-	@echo "--> Database dumped"
+	@echo "\n$(GREEN)--> Database dumped <--$(RESET)\n"
 
 restore:
+	@$(MAKE) is-file-empty
+
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
 		$(DB_CONTAINER) mysql -uroot -p$(DB_PASSWORD) $(DB_NAME) < $(file); \
-    else \
+	else \
 		$(DRUSH) sql:cli < $(file); \
-    fi
-	@echo "--> Database restored"
+	fi
+
+	@echo "\n$(GREEN)--> Database restored <--$(RESET)\n"
 
 config-export:
 	@$(MAKE) cache-clear
@@ -73,10 +85,14 @@ config-import:
 	@$(DRUSH) config:import -y
 
 install:
-	@$(composer) install
+	@$(MAKE) is-file-empty
+	@$(composer) install;
+
 	@if [ "$(DOCKER_ENABLED)" = 0 ]; then \
 		$(MAKE) create-database; \
-    fi
+	fi; \
+
 	@$(MAKE) restore file=$(file)
 	@$(MAKE) config-import
-	@echo "--> Project ready to be started"
+
+	@echo "\n$(BLUE)--> Project ready to be started <--$(RESET)\n"
