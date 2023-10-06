@@ -1,5 +1,7 @@
 # Defines docker binaries
 
+DOCKER_ENABLED ?= 0
+
 ifeq ($(DOCKER_ENABLED),1)
   docker := $(shell which docker)
   docker-compose := $(shell which docker-compose)

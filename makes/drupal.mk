@@ -1,34 +1,67 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+CONTAINER_NAME ?= php
+DB_CONTAINER_NAME ?= db
 
 include $(SELF_DIR)binaries/php.mk
 
-DRUSH := vendor/bin/drush
 current-date = $(shell date +"_%Y-%m-%d_%H-%M-%S")
-
 port ?= 8616
 
+ifeq ($(DOCKER_ENABLED), 1)
+	CONTAINER := $(docker-compose) exec $(CONTAINER_NAME)
+	DB_CONTAINER := $(docker-compose) exec -T $(DB_CONTAINER_NAME)
+	DRUSH := $(CONTAINER) vendor/bin/drush
+else
+	DRUSH := vendor/bin/drush
+endif
+
 cache-clear:
-	@echo "Cache clear"
-	$(DRUSH) cache:rebuild
+	@$(DRUSH) cache:rebuild
+	@echo "--> Cache clear"
 
 init-backup:
-	@mkdir backups -p
+	@if [ "$(DOCKER_ENABLED)" ]; then \
+		$(CONTAINER) mkdir backups -p; \
+    else \
+        mkdir backups -p; \
+    fi
+	@echo "--> backups directory enabled"
 
 refresh-backups:
-	@rm -rf backups/*
+	@if [ "$(DOCKER_ENABLED)" ]; then \
+		$(CONTAINER) rm -rf backups/*; \
+    else \
+    	rm -rf backups/*; \
+    fi
+	@echo "--> Backup directory cleaned"
 
 create-database:
-	@$(DRUSH) sql:create -y
+	@if [ "$(DOCKER_ENABLED)" ]; then \
+    	echo 'You should create the database by your own, this method is not safe'; \
+    else \
+		$(DRUSH) sql:create -y; \
+		echo "--> Database created"; \
+    fi
 
 start:
 	@$(DRUSH) rs $(port)
 
 dump:
 	@$(MAKE) init-backup
-	@$(DRUSH) sql:dump --result-file=../backups/dump$(current-date).sql
+	@if [ "$(DOCKER_ENABLED)" ]; then \
+		$(DB_CONTAINER) mysqldump -uroot -p$(DB_PASSWORD) $(DB_NAME) > backups/dump$(current-date).sql; \
+    else \
+		$(DRUSH) sql:dump --result-file=../backups/dump$(current-date).sql; \
+    fi
+	@echo "--> Database dumped"
 
 restore:
-	@$(DRUSH) sql:cli < $(file)
+	@if [ "$(DOCKER_ENABLED)" ]; then \
+		$(DB_CONTAINER) mysql -uroot -p$(DB_PASSWORD) $(DB_NAME) < $(file); \
+    else \
+		$(DRUSH) sql:cli < $(file); \
+    fi
+	@echo "--> Database restored"
 
 config-export:
 	@$(MAKE) cache-clear
@@ -40,6 +73,9 @@ config-import:
 
 install:
 	@$(composer) install
-	@$(MAKE) create-database
+	@if [ "$(DOCKER_ENABLED)" = 0 ]; then \
+		$(MAKE) create-database; \
+    fi
 	@$(MAKE) restore file=$(file)
 	@$(MAKE) config-import
+	@echo "--> Project ready to be started"

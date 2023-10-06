@@ -1,6 +1,6 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-include $(SELF_DIR)binaries/docker.mk
+include $(SELF_DIR)binaries/php.mk
 
 database:
 	@$(php) bin/console doctrine:database:create
