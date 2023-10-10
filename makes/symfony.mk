@@ -11,3 +11,6 @@ database-drop:
 	@$(php) bin/console doctrine:database:drop -f
 
 database-reset: database-drop database
+
+install:
+	@$(MAKE) do-vendor

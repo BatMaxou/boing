@@ -1,7 +1,6 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
 include $(SELF_DIR)binaries/php.mk
-include $(SELF_DIR)style/color.mk
 
 current-date = $(shell date +"_%Y-%m-%d_%H-%M-%S")
 port ?= 8616
@@ -86,7 +85,7 @@ config-import:
 
 install:
 	@$(MAKE) is-file-empty
-	@$(composer) install;
+	@$(MAKE) do-vendor
 
 	@if [ "$(DOCKER_ENABLED)" = 0 ]; then \
 		$(MAKE) create-database; \
