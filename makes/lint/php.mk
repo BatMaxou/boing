@@ -6,4 +6,4 @@ qa := $(docker) run --rm -t -v `pwd`:/project --workdir="/project" jakzal/phpqa:
 phpcsfixer := $(qa) php-cs-fixer
 
 phpstan: ## Lint - PHPStan - static code analysis
-	$(php) vendor/bin/phpstan analyse $(PHPSTAN_CODE_PATH) --configuration=$(PHPSTAN_CONFIGURATION_FILE)
+	@$(php) vendor/bin/phpstan analyse $(PHPSTAN_CODE_PATH) --configuration=$(PHPSTAN_CONFIGURATION_FILE)
