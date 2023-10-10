@@ -1,6 +1,7 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-include $(SELF_DIR)binaries/php.mk
+include $(SELF_DIR)lint/symfony.mk
+include $(SELF_DIR)boing.mk
 
 database:
 	@$(php) bin/console doctrine:database:create

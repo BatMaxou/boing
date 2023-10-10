@@ -1,6 +1,6 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-include $(SELF_DIR)binaries/php.mk
+include $(SELF_DIR)boing.mk
 
 current-date = $(shell date +"_%Y-%m-%d_%H-%M-%S")
 port ?= 8616
