@@ -1,7 +1,6 @@
 # Defines php binaries
 
 include $(SELF_DIR)binaries/docker.mk
-include $(SELF_DIR)style/color.mk
 
 PHP_DOCKER_COMPOSER_SERVICE ?= php
 
@@ -15,8 +14,4 @@ endif
 
 php := $(PHP_BIN)
 composer := $(php) $(COMPOSER_BIN)
-
-do-vendor:
-	@$(composer) install
-	@echo "\n$(GREEN)--> Dependencies ready <--$(RESET)\n"
     
