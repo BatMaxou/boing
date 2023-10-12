@@ -4,7 +4,7 @@ services:
   db:
     image: mariadb:10.6
     volumes:
-      - database:/var/lib/mysql
+      - db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}

@@ -84,14 +84,15 @@ config-import:
 	@$(DRUSH) config:import -y
 
 install:
-	@$(MAKE) is-file-empty
 	@$(MAKE) do-vendor
 
 	@if [ "$(DOCKER_ENABLED)" = 0 ]; then \
 		$(MAKE) create-database; \
 	fi; \
 
-	@$(MAKE) restore file=$(file)
-	@$(MAKE) config-import
+	@if [ "$(file)" ]; then \
+		$(MAKE) restore file=$(file); \
+		$(MAKE) config-import; \
+	fi
 
 	@echo "\n$(BLUE)--> Project ready to be started <--$(RESET)\n"
