@@ -12,7 +12,7 @@ git submodule init
 ```
 
 ```bash
-git submodule add git@github.com:BatMaxou/boing.git
+git submodule add git@github.com:BatMaxou/boing.git .boing
 ```
 
 ### Docker
