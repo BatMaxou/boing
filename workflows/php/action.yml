@@ -1,0 +1,17 @@
+name: PHP Stan
+description: 'Run PHP checks using Docker'
+
+runs: 
+  using: 'composite'
+  steps:
+    - name: Vendor install
+      run: make vendor
+      shell: bash
+
+    - name: Php lint
+      run: make phpcs
+      shell: bash
+
+    - name: Phpstan
+      run: make phpstan
+      shell: bash
