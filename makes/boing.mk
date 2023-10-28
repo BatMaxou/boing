@@ -9,6 +9,7 @@ boing:
 
 	@echo "\n$(GREEN)--> Lint packages installed <--$(RESET)\n"
 
-do-vendor:
+vendor:
 	@$(composer) install
 	@echo "\n$(GREEN)--> Dependencies ready <--$(RESET)\n"
+.PHONY: vendor
