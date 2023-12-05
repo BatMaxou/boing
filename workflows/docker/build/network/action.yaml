@@ -1,0 +1,13 @@
+name: Network Docker
+description: 'Create the given Docker network'
+inputs:
+  network-name:
+    description: 'Name of the network'
+    required: true
+    default: 'default'
+runs:
+  using: composite
+  steps:
+    - name: Create network
+      run: docker network create ${{ inputs.network-name }}
+      shell: bash

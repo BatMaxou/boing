@@ -1,0 +1,13 @@
+name: PHP Linter
+description: 'Run PHPcs and PHPstan'
+
+runs:
+  using: composite
+  steps:
+    - name: Phpcs
+      run: make phpcs
+      shell: bash
+
+    - name: Phpstan
+      run: make phpstan
+      shell: bash
