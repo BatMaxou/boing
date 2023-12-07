@@ -8,19 +8,25 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  php:
+  app:
     build:
-      context: ./.boing/docker/php
+      context: .
+      dockerfile: .boing/docker/app/symfony/Dockerfile
     volumes:
       - .:/srv
+  # php:
+  #   build:
+  #     context: .boing/docker/php
+  #   volumes:
+  #     - .:/srv
 
-  web:
-    depends_on:
-      - php
-    build:
-      context: ./.boing/docker/nginx/symfony
-    volumes:
-      - ./public:/srv/public
+  # web:
+  #   depends_on:
+  #     - php
+  #   build:
+  #     context: .boing/docker/nginx/symfony
+  #   volumes:
+  #     - ./public:/srv/public
 
 volumes:
   db_data:

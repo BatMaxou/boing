@@ -2,6 +2,7 @@ FROM nginx:1.25-alpine
 
 ENV root "/srv/public"
 ENV index "index.php"
+ENV fastcgi_pass "php:9000"
 
 ADD ./default.conf /etc/nginx/conf.d/default.template
 
