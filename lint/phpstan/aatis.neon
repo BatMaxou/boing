@@ -1,0 +1,5 @@
+parameters:
+    level: max
+    ignoreErrors:
+    excludePaths:
+    reportUnmatchedIgnoredErrors: false

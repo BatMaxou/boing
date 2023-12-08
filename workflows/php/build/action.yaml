@@ -1,0 +1,9 @@
+name: Build Vendor
+description: 'Build dependencies into vendor folder'
+
+runs:
+  using: composite
+  steps:
+    - name: Vendor install
+      run: make vendor
+      shell: bash

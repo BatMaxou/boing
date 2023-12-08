@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  db:
+    image: mariadb:10.3
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: .boing/docker/app/aatis/Dockerfile
+      args:
+        PHP_VERSION: "8.2"
+    volumes:
+      - .:/srv
+  # php:
+  #   build:
+  #     context: .boing/docker/php
+  #   volumes:
+  #     - .:/srv
+
+  # web:
+  #   depends_on:
+  #     - php
+  #   build:
+  #     context: .boing/docker/nginx/aatis
+  #   volumes:
+  #     - ./public:/srv/public
+
+volumes:
+  db_data:

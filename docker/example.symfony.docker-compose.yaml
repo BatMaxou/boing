@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  db:
+    image: mariadb:10.3
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: .boing/docker/app/symfony/Dockerfile
+    volumes:
+      - .:/srv
+  # php:
+  #   build:
+  #     context: .boing/docker/php
+  #   volumes:
+  #     - .:/srv
+
+  # web:
+  #   depends_on:
+  #     - php
+  #   build:
+  #     context: .boing/docker/nginx/symfony
+  #   volumes:
+  #     - ./public:/srv/public
+
+volumes:
+  db_data:
