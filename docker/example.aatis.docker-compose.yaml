@@ -8,19 +8,27 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  php:
+  app:
     build:
-      context: ./.boing/docker/php
+      context: .
+      dockerfile: .boing/docker/app/aatis/Dockerfile
+      args:
+        PHP_VERSION: "8.2"
     volumes:
       - .:/srv
+  # php:
+  #   build:
+  #     context: .boing/docker/php
+  #   volumes:
+  #     - .:/srv
 
-  web:
-    depends_on:
-      - php
-    build:
-      context: ./.boing/docker/nginx/aatis
-    volumes:
-      - ./public:/srv/public
+  # web:
+  #   depends_on:
+  #     - php
+  #   build:
+  #     context: .boing/docker/nginx/aatis
+  #   volumes:
+  #     - ./public:/srv/public
 
 volumes:
   db_data:

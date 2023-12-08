@@ -9,23 +9,33 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
 
-  php:
+  app:
     depends_on:
       - db
     build:
-      context: ./.boing/docker/php
+      context: .
+      dockerfile: .boing/docker/app/drupal/Dockerfile
       args:
         GD_REQUIRE: 1
     volumes:
       - .:/srv
+  # php:
+  #   depends_on:
+  #     - db
+  #   build:
+  #     context: .boing/docker/php
+  #     args:
+  #       GD_REQUIRE: 1
+  #   volumes:
+  #     - .:/srv
 
-  web:
-    depends_on:
-      - php
-    build:
-      context: ./.boing/docker/nginx/drupal
-    volumes:
-      - .:/srv
+  # web:
+  #   depends_on:
+  #     - php
+  #   build:
+  #     context: .boing/docker/nginx/drupal
+  #   volumes:
+  #     - .:/srv
 
 volumes:
   db_data:
