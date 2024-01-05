@@ -1,6 +1,6 @@
 include $(SELF_DIR)binaries/php.mk
 
-PHPQA_TAG ?= php8.1
+PHPQA_TAG ?= php8.2
 PHP_CS_FIXER_CONFIGURATION_FILE ?= $(SELF_DIR)../lint/php-cs-fixer/.php-cs-fixer.php
 
 qa := $(docker) run --rm -t -v `pwd`:/project --workdir="/project" jakzal/phpqa:$(PHPQA_TAG)
