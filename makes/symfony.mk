@@ -3,6 +3,12 @@ SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 include $(SELF_DIR)boing.mk
 include $(SELF_DIR)lint/symfony.mk
 
+ifeq ($(DOCKER_ENABLED),1)
+	mysqldump := $(docker-compose) run --rm db mysqldump -h $(DB_HOST) -P $(DB_PORT) -u $(DB_USER) -p'$(DB_PASSWORD)'
+else
+	mysqldump := mysqldump -h $(DB_HOST) -P $(DB_PORT) -u $(DB_USER) -p'$(DB_PASSWORD)'
+endif
+
 database-create:
 	@$(php) bin/console doctrine:database:create
 
@@ -18,6 +24,9 @@ database-fixtures:
 database: database-create database-update database-fixtures
 
 database-reset: database-drop database
+
+database-dump:
+	$(mysqldump) $(DB_NAME) | gzip -9 > dump/backup_$(shell date +%F_%T).sql.gz 2> /dev/null
 
 install:
 	@$(MAKE) vendor
