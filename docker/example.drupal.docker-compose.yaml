@@ -3,11 +3,11 @@ version: "3"
 services:
   db:
     image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    #     MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - db_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
 
   app:
     depends_on:
@@ -19,6 +19,15 @@ services:
         GD_REQUIRE: 1
     volumes:
       - .:/srv
+  # pma:
+  #   image: phpmyadmin:latest
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+  #   ports:
+  #     - "82:80"
+  #   depends_on:
+  #     - db
+
   # php:
   #   depends_on:
   #     - db

@@ -4,7 +4,8 @@ services:
   db:
     image: mariadb:10.3
     environment:
-      MARIADB_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    #     MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - db_data:/var/lib/mysql
 
@@ -14,6 +15,15 @@ services:
       dockerfile: .boing/docker/app/symfony/Dockerfile
     volumes:
       - .:/srv
+  # pma:
+  #   image: phpmyadmin:latest
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+  #   ports:
+  #     - "82:80"
+  #   depends_on:
+  #     - db
+
   # php:
   #   build:
   #     context: .boing/docker/php
