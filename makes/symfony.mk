@@ -15,10 +15,10 @@ else
 endif
 
 database-create:
-	@$(php) bin/console doctrine:database:create
+	@$(php) bin/console doctrine:database:create --if-not-exists
 
 database-drop:
-	@$(php) bin/console doctrine:database:drop -f
+	@$(php) bin/console doctrine:database:drop -f --if-exists
 
 database-update:
 	@$(php) bin/console doctrine:schema:update -f --complete
