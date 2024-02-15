@@ -5,7 +5,7 @@ FROM php:${PHP_VERSION}-fpm-alpine
 
 #Add composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
