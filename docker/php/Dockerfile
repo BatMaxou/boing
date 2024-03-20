@@ -17,12 +17,14 @@ RUN install-php-extensions pdo_mysql
 
 ARG ENABLE_REDIS=0
 ARG ENABLE_AMQP=0
+ARG ENABLE_PCOV=0
 
 ARG GD_REQUIRE=0
 ARG INTL_REQUIRE=0
 
 RUN if [[ "${ENABLE_AMQP}" -eq 1 ]] ; then install-php-extensions amqp ; fi
 RUN if [[ "${ENABLE_REDIS}" -eq 1 ]] ; then install-php-extensions redis ; fi
+RUN if [[ "${ENABLE_PCOV}" -eq 1 ]] ; then install-php-extensions pcov ; fi
 
 RUN if [[ "${GD_REQUIRE}" -eq 1 ]] ; then install-php-extensions gd; fi
 RUN if [[ "${INTL_REQUIRE}" -eq 1 ]] ; then install-php-extensions intl ; fi
