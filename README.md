@@ -81,7 +81,7 @@ services:
 #### Docker up
 
 ```
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 #### Database & dependencies
