@@ -1,9 +1,9 @@
 name: Launch Docker
-description: 'Launch Docker based on docker-compose.yaml file'
+description: "Launch Docker based on docker-compose.yaml file"
 
 runs:
   using: composite
   steps:
     - name: Starting docker
-      run: docker-compose up -d
+      run: docker compose up -d
       shell: bash
