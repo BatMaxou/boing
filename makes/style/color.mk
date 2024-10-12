@@ -18,3 +18,4 @@ show-colors:
 	@echo "${BLUE}BLUE${RESET}"
 	@echo "${WHITE}WHITE${RESET}"
 	@echo "use RESET to reset the color"
+.PHONY: show-colors

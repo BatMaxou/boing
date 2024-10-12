@@ -5,3 +5,4 @@ include $(SELF_DIR)lint/aatis.mk
 
 install:
 	@$(MAKE) vendor
+.PHONY: install

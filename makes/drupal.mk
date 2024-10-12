@@ -18,6 +18,7 @@ endif
 cache-clear:
 	@$(DRUSH) cache:rebuild
 	@echo "\n$(GREEN)--> Cache clear <--$(RESET)\n"
+.PHONY: cache-clear
 
 is-file-empty:
 	@if [ "$(file)" ]; then \
@@ -26,6 +27,7 @@ is-file-empty:
 		echo "\n$(RED)--> Missing file to restore <--$(RESET)\n"; \
 		exit 1; \
 	fi
+.PHONY: is-file-empty
 
 init-backup:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
@@ -34,6 +36,7 @@ init-backup:
         mkdir backups -p; \
     fi
 	@echo "\n$(BLUE)--> $(PURPLE)backups $(BLUE)directory enabled <--$(RESET)\n"
+.PHONY: init-backup
 
 refresh-backups:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
@@ -43,6 +46,7 @@ refresh-backups:
     fi
 	@echo "\n$(GREEN)--> Backup directory cleaned <--$(RESET)\n"
 	@$(MAKE) dump
+.PHONY: refresh-backups
 
 create-database:
 	@if [ "$(DOCKER_ENABLED)" = 1 ]; then \
@@ -51,9 +55,11 @@ create-database:
 		$(DRUSH) sql:create -y; \
 		echo "\n$(GREEN)--> Database created <--$(RESET)\n"; \
     fi
+.PHONY: create-database
 
 start:
 	@$(DRUSH) rs $(port)
+.PHONY: start
 
 dump:
 	@$(MAKE) init-backup
@@ -63,6 +69,7 @@ dump:
 		$(DRUSH) sql:dump --result-file=../backups/dump$(current-date).sql; \
     fi
 	@echo "\n$(GREEN)--> Database dumped <--$(RESET)\n"
+.PHONY: dump
 
 restore:
 	@$(MAKE) is-file-empty
@@ -74,14 +81,17 @@ restore:
 	fi
 
 	@echo "\n$(GREEN)--> Database restored <--$(RESET)\n"
+.PHONY: restore
 
 config-export:
 	@$(MAKE) cache-clear
 	@$(DRUSH) config:export -y
+.PHONY: config-export
 
 config-import:
 	@$(MAKE) cache-clear
 	@$(DRUSH) config:import -y
+.PHONY: config-import
 
 install:
 	@$(MAKE) do-vendor
@@ -96,3 +106,4 @@ install:
 	fi
 
 	@echo "\n$(BLUE)--> Project ready to be started <--$(RESET)\n"
+.PHONY: install
