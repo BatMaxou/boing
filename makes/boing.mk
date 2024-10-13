@@ -14,6 +14,7 @@ boing:
 	@$(composer) require phpstan/phpstan --dev
 
 	@echo "\n$(GREEN)--> Lint packages installed <--$(RESET)\n"
+.PHONY: boing
 
 vendor:
 	@$(composer) install $(composer_options)
