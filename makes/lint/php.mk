@@ -2,12 +2,12 @@ include $(SELF_DIR)binaries/php.mk
 
 PHP_CS_FIXER_CONFIGURATION_FILE ?= $(SELF_DIR)../lint/php-cs-fixer/.php-cs-fixer.php
 
-PHP_FIXER_VERSION ?= 3-php8.3
+PHP_FIXER_VERSION ?= 3-php8.2
 
 ifeq ($(docker), )
 	phpcsfixer := vendor/bin/php-cs-fixer
 else
-	phpcsfixer := $(docker) run --rm -it -v `pwd`:/code ghcr.io/php-cs-fixer/php-cs-fixer:${PHP_FIXER_VERSION}
+	phpcsfixer := $(docker) run --rm -v `pwd`:/code ghcr.io/php-cs-fixer/php-cs-fixer:${PHP_FIXER_VERSION}
 endif
 
 fixcs:
